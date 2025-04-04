@@ -98,7 +98,7 @@ export const effectPresets = [
   {
     name: "Blood Splatter 3",
     value: "url('/effects/splatter-3.png') no-repeat center center / cover",
-    opacity: 0.8,
+    opacity: 0.9,
   },
   {
     name: "Marks",
