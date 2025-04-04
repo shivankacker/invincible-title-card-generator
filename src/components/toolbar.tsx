@@ -1,10 +1,9 @@
-import domtoimage from "dom-to-image";
 import { EditorState } from "../types";
 import { CheckBox } from "./checkbox";
 import { Slider } from "./slider";
 import ColorInput from "./colorinput";
 import ImageInput from "./uploadimage";
-import useDeviceInfo from "../utils";
+import html2canvas from "html2canvas-pro";
 
 const backgroundPresets = [
   {
@@ -125,9 +124,17 @@ export function Toolbar(props: {
   const download = async () => {
     if (!canvasRef.current) return;
     setState({ ...state, generating: true });
-    const dataURL = await domtoimage.toPng(canvasRef.current, {
-      height: 1080,
-      width: 1920,
+    const dataURL = await new Promise<string>((resolve) => {
+      setTimeout(async () => {
+        const canvas = await html2canvas(canvasRef.current!, {
+          allowTaint: true,
+          useCORS: true,
+          height: canvasRef.current!.clientHeight,
+          width: canvasRef.current!.clientWidth,
+          scale: 1,
+        });
+        resolve(canvas.toDataURL("image/png"));
+      }, 500);
     });
 
     const link = document.createElement("a");
@@ -139,24 +146,9 @@ export function Toolbar(props: {
     setState({ ...state, generating: false });
   };
 
-  const device = useDeviceInfo();
-
   return (
     <div className="md:w-1/3 w-full md:max-h-[calc(100vh-200px)] md:overflow-auto">
       <div className="md:p-8">
-        {device.browser.includes("safari") && (
-          <div className="text-red-500 text-sm mb-2">
-            <i className="fas fa-exclamation-triangle mr-2" />
-            Safari is not supported. Please use Chrome or Firefox.
-          </div>
-        )}
-        {device.os.includes("ios") && (
-          <div className="text-red-500 text-sm mb-2">
-            <i className="fas fa-exclamation-triangle mr-2" />
-            Your device might not generate the title card properly. I am working
-            on it.
-          </div>
-        )}
         <input
           type="text"
           value={state.text}

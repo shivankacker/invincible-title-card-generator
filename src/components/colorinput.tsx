@@ -14,8 +14,8 @@ export default function ColorInput(props: {
     >
       <input
         type="color"
-        className="hidden"
         value={value}
+        className="opacity-0 cursor-pointer"
         onChange={(e) => onChange(e.target.value)}
       />
     </label>
