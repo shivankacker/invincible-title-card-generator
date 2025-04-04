@@ -6,10 +6,17 @@ export function Preview(props: {
   canvasRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const { state, canvasRef } = props;
-  const [canvasDimensions, setCanvasDimensions] = useState({
+  const [_canvasDimensions, setCanvasDimensions] = useState({
     width: 0,
     height: 0,
   });
+
+  const canvasDimensions = state.generating
+    ? {
+        width: 1920,
+        height: 1080,
+      }
+    : _canvasDimensions;
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,11 +37,18 @@ export function Preview(props: {
   }, [canvasRef]);
 
   return (
-    <div className="bg-slate-900 rounded-xl aspect-video w-full md:w-2/3 overflow-hidden select-none">
+    <div className="bg-slate-900 rounded-xl aspect-video w-full md:w-2/3 overflow-hidden select-none relative">
+      {state.generating && (
+        <div className="absolute inset-0 bg-slate-900 flex items-center justify-center z-10">
+          Generating
+        </div>
+      )}
       <div
-        className="relative w-full h-full flex flex-col items-center justify-center gap-[5%]"
+        className="relative flex flex-col items-center justify-center gap-[5%]"
         ref={canvasRef}
         style={{
+          width: !state.generating ? "100%" : "1920px",
+          height: !state.generating ? "100%" : "1080px",
           background: state.background,
         }}
       >
@@ -75,7 +89,12 @@ export function Preview(props: {
           </div>
         )}
         {state.showWatermark && (
-          <div className="absolute bottom-0 right-0 p-2 text-xs text-white opacity-50">
+          <div
+            className="absolute bottom-0 right-0 p-2 text-white opacity-50"
+            style={{
+              fontSize: `${(canvasDimensions.width / 100) * 1.5}px`,
+            }}
+          >
             Made with invincible.shivank.dev
           </div>
         )}

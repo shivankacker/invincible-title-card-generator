@@ -94,9 +94,10 @@ export function Toolbar(props: {
 
   const download = async () => {
     if (!canvasRef.current) return;
+    setState({ ...state, generating: true });
     const dataURL = await domtoimage.toPng(canvasRef.current, {
-      height: canvasRef.current.clientHeight,
-      width: canvasRef.current.clientWidth,
+      height: 1080,
+      width: 1920,
     });
 
     const link = document.createElement("a");
@@ -105,6 +106,7 @@ export function Toolbar(props: {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    setState({ ...state, generating: false });
   };
 
   return (

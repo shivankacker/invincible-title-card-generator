@@ -18,6 +18,7 @@ function App() {
     outline: 0,
     outlineColor: "black",
     effect: null,
+    generating: false,
   });
 
   const canvasRef = useRef<HTMLDivElement>(null);

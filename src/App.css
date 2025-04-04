@@ -17,7 +17,7 @@ body {
 }
 
 .curved-text {
-  transform: perspective(400px) rotateX(20deg) scaleY(1.4);
+  transform: perspective(400px) rotateX(10deg) scaleY(1.4);
 }
 
 .input {
