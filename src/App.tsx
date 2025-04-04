@@ -5,6 +5,7 @@ import { EditorState } from "./types";
 import { Preview } from "./components/preview";
 import { Toolbar } from "./components/toolbar";
 import { Footer } from "./components/footer";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   const [state, setState] = useState<EditorState>({
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <>
+      <Analytics />
       <Header />
       <div className="flex md:flex-row flex-col md:items-center md:justify-center md:h-screen p-4 gap-4 md:gap-0 md:p-12">
         <Preview canvasRef={canvasRef} state={state} />
