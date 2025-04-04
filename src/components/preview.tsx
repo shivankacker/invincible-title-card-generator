@@ -74,7 +74,7 @@ export function Preview(props: {
             <div
               style={{
                 fontSize: `${(canvasDimensions.width / 100) * 1.9}px`,
-                fontWeight: "lighter",
+                fontWeight: canvasDimensions.width * 0.3,
               }}
             >
               BASED ON THE COMIC BOOK BY
@@ -82,6 +82,7 @@ export function Preview(props: {
             <div
               style={{
                 fontSize: `${(canvasDimensions.width / 100) * 3}px`,
+                fontWeight: canvasDimensions.width * 0.3,
               }}
             >
               Robert Kirkman, Cory Walker, & Ryan Ottley
