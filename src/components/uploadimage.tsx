@@ -2,7 +2,7 @@ export default function ImageInput(props: {
   value: string;
   onChange: (value: string) => void;
 }) {
-  const { value, onChange } = props;
+  const { onChange } = props;
 
   return (
     <label
