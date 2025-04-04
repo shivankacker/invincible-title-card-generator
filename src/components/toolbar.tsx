@@ -164,6 +164,22 @@ export function Toolbar(props: {
           className="input w-full"
           placeholder="Enter text"
         />
+        <input
+          type="text"
+          value={state.smallSubtitle}
+          onChange={(e) =>
+            setState({ ...state, smallSubtitle: e.target.value })
+          }
+          className="input w-full mt-2"
+          placeholder="Subtitle 1"
+        />
+        <input
+          type="text"
+          value={state.subtitle}
+          onChange={(e) => setState({ ...state, subtitle: e.target.value })}
+          className="input w-full mt-2"
+          placeholder="Subtitle 2"
+        />
         <br />
         <br />
         <Slider

@@ -88,7 +88,7 @@ export function Preview(props: {
                 fontWeight: canvasDimensions.width * 0.3,
               }}
             >
-              BASED ON THE COMIC BOOK BY
+              {state.smallSubtitle}
             </div>
             <div
               style={{
@@ -96,7 +96,7 @@ export function Preview(props: {
                 fontWeight: canvasDimensions.width * 0.3,
               }}
             >
-              Robert Kirkman, Cory Walker, & Ryan Ottley
+              {state.subtitle}
             </div>
           </div>
         )}

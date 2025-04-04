@@ -1,5 +1,7 @@
 export interface EditorState {
   text: string;
+  smallSubtitle: string;
+  subtitle: string;
   showCredits: boolean;
   showWatermark: boolean;
   color: string;
