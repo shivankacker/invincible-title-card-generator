@@ -81,7 +81,7 @@ const colorPresets = [
   },
 ];
 
-const effectPresets = [
+export const effectPresets = [
   {
     name: "None",
     value: null,
@@ -91,8 +91,23 @@ const effectPresets = [
     value: "url('/effects/blood-splatter.png') no-repeat center center / cover",
   },
   {
+    name: "Blood Splatter 2",
+    value: "url('/effects/splatter-2.png') no-repeat center center / cover",
+    opacity: 0.8,
+  },
+  {
+    name: "Blood Splatter 3",
+    value: "url('/effects/splatter-3.png') no-repeat center center / cover",
+    opacity: 0.8,
+  },
+  {
+    name: "Marks",
+    value: "url('/effects/marks.png') no-repeat center center / cover",
+  },
+  {
     name: "????",
     value: "url('/effects/sus.png') no-repeat center center / cover",
+    opacity: 0.8,
   },
 ];
 

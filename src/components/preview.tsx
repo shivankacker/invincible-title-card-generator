@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { EditorState } from "../types";
 import useDeviceInfo from "../utils";
+import { effectPresets } from "./toolbar";
 
 export function Preview(props: {
   state: EditorState;
@@ -71,6 +72,9 @@ export function Preview(props: {
           <div
             className="absolute inset-0 flex items-center justify-center"
             style={{
+              opacity:
+                effectPresets.find((e) => e.value === state.effect)?.opacity ||
+                1,
               background: state.effect,
             }}
           />
