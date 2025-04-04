@@ -4,6 +4,7 @@ import { CheckBox } from "./checkbox";
 import { Slider } from "./slider";
 import ColorInput from "./colorinput";
 import ImageInput from "./uploadimage";
+import useDeviceInfo from "../utils";
 
 const backgroundPresets = [
   {
@@ -138,9 +139,17 @@ export function Toolbar(props: {
     setState({ ...state, generating: false });
   };
 
+  const device = useDeviceInfo();
+
   return (
     <div className="md:w-1/3 w-full md:max-h-[calc(100vh-200px)] md:overflow-auto">
       <div className="md:p-8">
+        {device.browser.includes("safari") && (
+          <div className="text-red-500 text-sm mb-2">
+            <i className="fas fa-exclamation-triangle mr-2" />
+            Safari is not supported. Please use Chrome or Firefox.
+          </div>
+        )}
         <input
           type="text"
           value={state.text}
