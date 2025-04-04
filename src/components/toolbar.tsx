@@ -69,19 +69,38 @@ const colorPresets = [
   },
 ];
 
+const effectPresets = [
+  {
+    name: "None",
+    value: null,
+  },
+  {
+    name: "Blood Splatter",
+    value: "url('/effects/blood-splatter.png') no-repeat center center / cover",
+  },
+  {
+    name: "????",
+    value: "url('/effects/sus.png') no-repeat center center / cover",
+  },
+];
+
 const Preset = (props: {
   selected: boolean;
-  value: string;
-  onChange: (value: string) => void;
+  value: string | null;
+  onChange: (value: string | null) => void;
+  name: string;
 }) => {
   return (
     <button
-      className="w-10 aspect-square rounded-xl cursor-pointer hover:-translate-y-1 transition-all"
+      className={`w-10 aspect-square rounded-xl cursor-pointer hover:-translate-y-1 transition-all border-2 flex items-center justify-center ${props.selected ? "border-white" : "border-white/20"}`}
       style={{
-        background: props.value,
+        background: props.value || "",
       }}
       onClick={() => props.onChange(props.value)}
-    />
+      title={props.name}
+    >
+      {!props.value && <i className="far fa-ban text-2xl text-white" />}
+    </button>
   );
 };
 
@@ -143,7 +162,10 @@ export function Toolbar(props: {
               key={preset.name}
               value={preset.value}
               selected={preset.value === state.background}
-              onChange={(value) => setState({ ...state, background: value })}
+              onChange={(value) =>
+                setState({ ...state, background: value || "" })
+              }
+              name={preset.name}
             />
           ))}
         </div>
@@ -154,11 +176,23 @@ export function Toolbar(props: {
               key={preset.name}
               value={preset.value}
               selected={preset.value === state.color}
-              onChange={(value) => setState({ ...state, color: value })}
+              onChange={(value) => setState({ ...state, color: value || "" })}
+              name={preset.name}
             />
           ))}
         </div>
-
+        <div className="mt-4 mb-1">Effects</div>
+        <div className="flex gap-2">
+          {effectPresets.map((preset) => (
+            <Preset
+              key={preset.name}
+              value={preset.value}
+              selected={preset.value === state.effect}
+              onChange={(value) => setState({ ...state, effect: value })}
+              name={preset.name}
+            />
+          ))}
+        </div>
         <br />
         <CheckBox
           label="Show Subtitles"

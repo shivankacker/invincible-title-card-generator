@@ -64,6 +64,14 @@ export function Preview(props: {
         >
           {state.text}
         </div>
+        {state.effect && (
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{
+              background: state.effect,
+            }}
+          />
+        )}
         {state.showCredits && (
           <div
             style={{
