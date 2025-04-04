@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { EditorState } from "../types";
 
 export function Preview(props: {
   state: EditorState;
   canvasRef: React.RefObject<HTMLDivElement | null>;
-  setState: (state: EditorState) => void;
 }) {
-  const { state, setState, canvasRef } = props;
+  const { state, canvasRef } = props;
   const [canvasDimensions, setCanvasDimensions] = useState({
     width: 0,
     height: 0,

@@ -13,7 +13,6 @@
     "@tailwindcss/vite": "^4.1.2",
     "@types/dom-to-image": "^2.6.7",
     "dom-to-image": "^2.6.0",
-    "html2canvas-pro": "^1.5.8",
     "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

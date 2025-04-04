@@ -25,7 +25,7 @@ function App() {
     <>
       <Header />
       <div className="flex md:flex-row flex-col md:items-center md:justify-center md:h-screen p-4 gap-4 md:gap-0 md:p-12">
-        <Preview canvasRef={canvasRef} state={state} setState={setState} />
+        <Preview canvasRef={canvasRef} state={state} />
         <Toolbar canvasRef={canvasRef} state={state} setState={setState} />
       </div>
       <Footer />

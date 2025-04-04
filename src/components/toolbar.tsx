@@ -1,4 +1,3 @@
-import html2canvas from "html2canvas-pro";
 import domtoimage from "dom-to-image";
 import { EditorState } from "../types";
 import { CheckBox } from "./checkbox";
