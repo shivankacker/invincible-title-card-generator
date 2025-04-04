@@ -5,8 +5,14 @@
   src: url('/woodblock.otf') format('opentype');
 }
 
+@font-face {
+  font-family: 'Futura';
+  src: url('/futura-medium.ttf') format('truetype'),
+       url('/futura-light.ttf') format('truetype');
+}
+
 body {
-  font-family: "Rubik", sans-serif;
+  font-family: "Futura", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
   @apply bg-slate-950 text-slate-100

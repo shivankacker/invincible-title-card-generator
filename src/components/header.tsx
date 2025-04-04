@@ -4,7 +4,7 @@ export default function Header() {
       <div></div>
       <div className="flex flex-col items-center justify-center p-4">
         <img src="/logo.png" alt="Logo" className="w-full md:w-auto md:h-14" />
-        <div className="leading-4 text-center woodblock tracking-widest text-xs md:text-base">
+        <div className="leading-4 text-center tracking-widest text-xs">
           Title Card Generator
         </div>
       </div>
