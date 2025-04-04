@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { EditorState } from "../types";
+import useDeviceInfo from "../utils";
 
 export function Preview(props: {
   state: EditorState;
@@ -10,6 +11,8 @@ export function Preview(props: {
     width: 0,
     height: 0,
   });
+
+  const device = useDeviceInfo();
 
   const canvasDimensions = state.generating
     ? {
@@ -53,7 +56,7 @@ export function Preview(props: {
         }}
       >
         <div
-          className="woodblock w-full outline-0 bg-transparent text-center curved-text"
+          className={`woodblock w-full outline-0 bg-transparent text-center ${device.isApple && state.generating ? "" : "curved-text"}`}
           style={{
             lineHeight: 0.8,
             fontSize: `${(canvasDimensions.width / 100) * state.fontSize}px`,
