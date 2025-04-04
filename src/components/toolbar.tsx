@@ -150,6 +150,13 @@ export function Toolbar(props: {
             Safari is not supported. Please use Chrome or Firefox.
           </div>
         )}
+        {device.os.includes("ios") && (
+          <div className="text-red-500 text-sm mb-2">
+            <i className="fas fa-exclamation-triangle mr-2" />
+            Your device might not generate the title card properly. I am working
+            on it.
+          </div>
+        )}
         <input
           type="text"
           value={state.text}
