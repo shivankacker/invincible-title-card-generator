@@ -2,6 +2,8 @@ import domtoimage from "dom-to-image";
 import { EditorState } from "../types";
 import { CheckBox } from "./checkbox";
 import { Slider } from "./slider";
+import ColorInput from "./colorinput";
+import ImageInput from "./uploadimage";
 
 const backgroundPresets = [
   {
@@ -21,10 +23,6 @@ const backgroundPresets = [
     value: "#e71616",
   },
   {
-    name: "green",
-    value: "#00e716",
-  },
-  {
     name: "purple",
     value: "#a716e7",
   },
@@ -35,6 +33,14 @@ const backgroundPresets = [
   {
     name: "white",
     value: "#ffffff",
+  },
+  {
+    name: "orange",
+    value: "#FFA500",
+  },
+  {
+    name: "gray",
+    value: "#808080",
   },
 ];
 
@@ -52,10 +58,6 @@ const colorPresets = [
     value: "#e71616",
   },
   {
-    name: "green",
-    value: "#00e716",
-  },
-  {
     name: "purple",
     value: "#a716e7",
   },
@@ -66,6 +68,14 @@ const colorPresets = [
   {
     name: "white",
     value: "#ffffff",
+  },
+  {
+    name: "orange",
+    value: "#FFA500",
+  },
+  {
+    name: "gray",
+    value: "#808080",
   },
 ];
 
@@ -92,7 +102,7 @@ const Preset = (props: {
 }) => {
   return (
     <button
-      className={`w-10 aspect-square rounded-xl cursor-pointer hover:-translate-y-1 transition-all border-2 flex items-center justify-center ${props.selected ? "border-white" : "border-white/20"}`}
+      className={`w-10 shrink-0 aspect-square rounded-xl cursor-pointer hover:-translate-y-1 transition-all border-2 flex items-center justify-center ${props.selected ? "border-white" : "border-white/20"}`}
       style={{
         background: props.value || "",
       }}
@@ -156,7 +166,7 @@ export function Toolbar(props: {
         />
         <br />
         <div className="mt-4 mb-1">Backgrounds</div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {backgroundPresets.map((preset) => (
             <Preset
               key={preset.name}
@@ -168,9 +178,17 @@ export function Toolbar(props: {
               name={preset.name}
             />
           ))}
+          <ColorInput
+            value={state.background}
+            onChange={(value) => setState({ ...state, background: value })}
+          />
+          <ImageInput
+            value={state.background}
+            onChange={(value) => setState({ ...state, background: value })}
+          />
         </div>
         <div className="mt-4 mb-1">Text Color</div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {colorPresets.map((preset) => (
             <Preset
               key={preset.name}
@@ -180,9 +198,13 @@ export function Toolbar(props: {
               name={preset.name}
             />
           ))}
+          <ColorInput
+            value={state.color}
+            onChange={(value) => setState({ ...state, color: value })}
+          />
         </div>
         <div className="mt-4 mb-1">Effects</div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {effectPresets.map((preset) => (
             <Preset
               key={preset.name}
