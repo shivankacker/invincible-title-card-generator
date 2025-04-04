@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.2",
-    "@types/dom-to-image": "^2.6.7",
     "@vercel/analytics": "^1.5.0",
+    "dom-to-image": "^2.6.0",
     "html2canvas-pro": "^1.5.8",
     "prettier": "^3.5.3",
     "react": "^19.0.0",
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@types/dom-to-image": "^2.6.7",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react-swc": "^3.8.0",

@@ -56,7 +56,7 @@ export function Preview(props: {
         }}
       >
         <div
-          className={`woodblock w-full outline-0 bg-transparent text-center ${device.isApple && state.generating ? "" : "curved-text"}`}
+          className={`woodblock w-full outline-0 bg-transparent text-center ${(device.os === "ios" || device.browser === "safari") && state.generating ? "" : "curved-text"}`}
           style={{
             lineHeight: 0.8,
             fontSize: `${(canvasDimensions.width / 100) * state.fontSize}px`,
