@@ -139,7 +139,7 @@ export function Toolbar(props: {
   };
 
   return (
-    <div className="md:w-1/3 w-full">
+    <div className="md:w-1/3 w-full md:max-h-[calc(100vh-200px)] md:overflow-auto">
       <div className="md:p-8">
         <input
           type="text"
