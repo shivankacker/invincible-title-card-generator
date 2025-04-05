@@ -100,10 +100,10 @@ export const effectPresets = [
     value: "url('/effects/splatter-3.png') no-repeat center center / cover",
     opacity: 0.9,
   },
-  {
-    name: "Marks",
-    value: "url('/effects/marks.png') no-repeat center center / cover",
-  },
+  // {
+  //   name: "Marks",
+  //   value: "url('/effects/marks.png') no-repeat center center / cover",
+  // },
   {
     name: "????",
     value: "url('/effects/sus.png') no-repeat center center / cover",
