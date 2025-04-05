@@ -111,6 +111,44 @@ export const effectPresets = [
   },
 ];
 
+export const presets: (Partial<EditorState> & { name: string })[] = [
+  {
+    name: "Invincible",
+    background: "url('/backgrounds/blue.jpg') no-repeat center center / cover",
+    color: "#eaed00",
+  },
+  {
+    name: "Invinciboy",
+    background: "url('/backgrounds/blue.jpg') no-repeat center center / cover",
+    color: "#000000",
+  },
+  {
+    name: "Atom Eve",
+    background: "#eb607a",
+    color: "#f3cad2",
+  },
+  {
+    name: "Omni Man",
+    background: "#e1ebed",
+    color: "#ca4230",
+  },
+  {
+    name: "Allen the Alien",
+    background: "#3936ed",
+    color: "#2bffe1",
+  },
+  {
+    name: "Immortal",
+    background: "#3c3d53",
+    color: "#e8c856",
+  },
+  {
+    name: "Oliver",
+    background: "#9a004f",
+    color: "#95b38e",
+  },
+];
+
 const Preset = (props: {
   selected: boolean;
   value: string | null;
@@ -216,6 +254,25 @@ export function Toolbar(props: {
           onChange={(value) => setState({ ...state, outline: value })}
         />
         <br />
+        <div className="mt-4 mb-1">Presets</div>
+        <div className="flex gap-2 flex-wrap">
+          {presets.map((preset) => (
+            <button
+              className="px-4 py-1 rounded-lg woodblock text-xl cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                setState({ ...state, ...preset });
+              }}
+              style={{
+                background: preset.background,
+                color: preset.color,
+              }}
+              key={preset.name}
+            >
+              {preset.name}
+            </button>
+          ))}
+        </div>
         <div className="mt-4 mb-1">Backgrounds</div>
         <div className="flex gap-2 flex-wrap">
           {backgroundPresets.map((preset) => (
