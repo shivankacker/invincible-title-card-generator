@@ -6,7 +6,6 @@ import ImageInput from "./uploadimage";
 import html2canvas from "html2canvas-pro";
 import domtoimage from "dom-to-image";
 import useDeviceInfo from "../utils";
-import { opacity } from "html2canvas-pro/dist/types/css/property-descriptors/opacity";
 
 const backgroundPresets = [
   {
