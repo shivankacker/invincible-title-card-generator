@@ -6,6 +6,7 @@ import ImageInput from "./uploadimage";
 import html2canvas from "html2canvas-pro";
 import domtoimage from "dom-to-image";
 import useDeviceInfo from "../utils";
+import { opacity } from "html2canvas-pro/dist/types/css/property-descriptors/opacity";
 
 const backgroundPresets = [
   {
@@ -88,22 +89,46 @@ export const effectPresets = [
   },
   {
     name: "Blood Splatter",
-    value: "url('/effects/blood-splatter.png') no-repeat center center / cover",
+    value:
+      "url('/effects/blood/splatter-1.png') no-repeat center center / cover",
   },
   {
     name: "Blood Splatter 2",
-    value: "url('/effects/splatter-2.png') no-repeat center center / cover",
+    value:
+      "url('/effects/blood/splatter-2.png') no-repeat center center / cover",
     opacity: 0.8,
   },
   {
     name: "Blood Splatter 3",
-    value: "url('/effects/splatter-3.png') no-repeat center center / cover",
+    value:
+      "url('/effects/blood/splatter-3.png') no-repeat center center / cover",
     opacity: 0.9,
   },
-  // {
-  //   name: "Marks",
-  //   value: "url('/effects/marks.png') no-repeat center center / cover",
-  // },
+  {
+    name: "Blood Splatter 4",
+    value: "url('/effects/blood/level-1.png') no-repeat center center / cover",
+    opacity: 0.8,
+  },
+  {
+    name: "Blood Splatter 5",
+    value: "url('/effects/blood/level-2.png') no-repeat center center / cover",
+    opacity: 0.8,
+  },
+  {
+    name: "Blood Splatter 6",
+    value: "url('/effects/blood/level-3.png') no-repeat center center / cover",
+    opacity: 0.8,
+  },
+  {
+    name: "Blood Splatter 7",
+    value: "url('/effects/blood/level-4.png') no-repeat center center / cover",
+    opacity: 0.8,
+  },
+  {
+    name: "Blood Splatter 8",
+    value: "url('/effects/blood/level-5.png') no-repeat center center / cover",
+    opacity: 0.8,
+  },
   {
     name: "????",
     value: "url('/effects/sus.png') no-repeat center center / cover",
