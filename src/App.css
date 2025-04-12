@@ -7,12 +7,16 @@
 
 @font-face {
   font-family: 'Futura';
-  src: url('/futura-medium.ttf') format('truetype'),
-       url('/futura-light.ttf') format('truetype');
+  src: url('/Futura.woff2') format('woff2'),
+      url('/Futura.woff') format('woff'),
+      url('/Futura.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
 
 body {
-  font-family: "Futura", sans-serif;
+  font-family: 'Futura';
   font-optical-sizing: auto;
   font-style: normal;
   @apply bg-slate-950 text-slate-100
