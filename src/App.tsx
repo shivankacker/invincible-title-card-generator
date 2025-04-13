@@ -6,8 +6,11 @@ import { Preview } from "./components/preview";
 import { Toolbar } from "./components/toolbar";
 import { Footer } from "./components/footer";
 import { Analytics } from "@vercel/analytics/react";
+import { useRandomSound } from "./utils";
 
 function App() {
+  useRandomSound(0.001); // Now only needs probability parameter
+
   const [state, setState] = useState<EditorState>({
     text: "Invincible",
     color: "#ebed00",

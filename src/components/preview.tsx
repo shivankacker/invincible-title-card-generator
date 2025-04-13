@@ -106,7 +106,7 @@ export function Preview(props: {
         )}
         {state.showWatermark && (
           <div
-            className="absolute bottom-0 right-0 text-white opacity-50"
+            className="absolute bottom-0 right-0 text-white opacity-50 whitespace-nowrap"
             style={{
               fontSize: `${(canvasDimensions.width / 100) * 1.5}px`,
               padding: `${(canvasDimensions.width / 100) * 1}px`,
