@@ -4,10 +4,6 @@
       "source": "/(.*)",
       "headers": [
         {
-          "key": "X-Frame-Options",
-          "value": "ALLOW-FROM https://shivank.dev"
-        },
-        {
           "key": "Content-Security-Policy",
           "value": "frame-ancestors https://shivank.dev;"
         }
