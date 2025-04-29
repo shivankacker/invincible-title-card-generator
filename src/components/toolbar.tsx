@@ -6,6 +6,7 @@ import ImageInput from "./uploadimage";
 import html2canvas from "html2canvas-pro";
 import domtoimage from "dom-to-image";
 import useDeviceInfo from "../utils";
+import AdBanner from "./adbanner";
 
 const backgroundPresets = [
   {
@@ -214,6 +215,12 @@ export function Toolbar(props: {
   return (
     <div className="md:w-1/3 w-full md:max-h-[calc(100vh-200px)] md:overflow-auto">
       <div className="md:p-8">
+        <AdBanner
+          data-ad-format="auto"
+          data-ad-slot="8323722851"
+          data-full-width-responsive="true"
+        />
+        <br />
         <input
           type="text"
           value={state.text}
