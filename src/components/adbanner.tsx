@@ -24,15 +24,15 @@ export default function AdBanner(props: {
 
   return (
     <div
-      className={twMerge(
-        `shrink-0 ${development && "bg-secondary flex items-center justify-center bg-gray-600"}`,
-        className,
-      )}
+      className={twMerge(`shrink-0 ${development && "bg-gray-600"}`, className)}
     >
       {development && <div className="text-white">Ad Banner</div>}
       <ins
         className="adsbygoogle"
-        style={style}
+        style={{
+          display: "block",
+          ...style,
+        }}
         data-ad-client="ca-pub-5462061436024339"
         {...otherProps}
       />
