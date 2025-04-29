@@ -7,7 +7,6 @@ import { Toolbar } from "./components/toolbar";
 import { Footer } from "./components/footer";
 import { Analytics } from "@vercel/analytics/react";
 import { useRandomSound } from "./utils";
-import AdBanner from "./components/adbanner";
 
 function App() {
   useRandomSound(0.001); // Now only needs probability parameter
