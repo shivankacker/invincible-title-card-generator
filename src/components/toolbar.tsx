@@ -219,6 +219,10 @@ export function Toolbar(props: {
           data-ad-format="auto"
           data-ad-slot="8323722851"
           data-full-width-responsive="true"
+          style={{
+            minWidth: 150,
+            minHeight: 150,
+          }}
         />
         <br />
         <input

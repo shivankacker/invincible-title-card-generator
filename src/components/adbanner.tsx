@@ -25,7 +25,7 @@ export default function AdBanner(props: {
   return (
     <div
       className={twMerge(
-        `shrink-0 ${development && "bg-secondary flex items-center justify-center h-40 bg-gray-600"}`,
+        `shrink-0 ${development && "bg-secondary flex items-center justify-center bg-gray-600"}`,
         className,
       )}
     >
