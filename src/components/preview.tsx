@@ -41,7 +41,7 @@ export function Preview(props: {
   }, [canvasRef]);
 
   return (
-    <div className="bg-slate-900 rounded-xl aspect-video w-full md:w-2/3 overflow-hidden select-none relative">
+    <div className="bg-slate-900 rounded-xl aspect-video overflow-hidden select-none relative shrink-0">
       {state.generating && (
         <div className="absolute inset-0 bg-slate-900 flex items-center justify-center z-10">
           Generating
@@ -106,9 +106,10 @@ export function Preview(props: {
         )}
         {state.showWatermark && (
           <div
-            className="absolute bottom-0 right-0 p-2 text-white opacity-50"
+            className="absolute bottom-0 right-0 text-white opacity-50 whitespace-nowrap"
             style={{
               fontSize: `${(canvasDimensions.width / 100) * 1.5}px`,
+              padding: `${(canvasDimensions.width / 100) * 1}px`,
             }}
           >
             Made with invincible.shivank.dev

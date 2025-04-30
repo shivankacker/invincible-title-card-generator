@@ -1,4 +1,44 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+export const SOUND_FILES = [
+  "/sounds/hmm.mp3",
+  // Add more sound files here as they become available
+] as const;
+
+export const useRandomSound = (probability: number = 0.3) => {
+  const [hasPlayed, setHasPlayed] = useState(false);
+  const audio = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (hasPlayed) return;
+    // choose a random sound file
+    const randomSound =
+      SOUND_FILES[Math.floor(Math.random() * SOUND_FILES.length)];
+    audio.current = new Audio(randomSound);
+    const audioElement = audio.current;
+    audioElement.preload = "auto";
+    audioElement.loop = false;
+    audioElement.volume = 0.5;
+
+    const handleInteraction = () => {
+      if (Math.random() < probability) {
+        audioElement.currentTime = 0; // Reset to the beginning
+        audioElement.play().catch((error) => {
+          console.error("Error playing sound:", error);
+        });
+      }
+      setHasPlayed(true);
+    };
+
+    window.addEventListener("click", handleInteraction);
+    window.addEventListener("touchstart", handleInteraction);
+
+    return () => {
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+    };
+  }, [hasPlayed]);
+};
 
 function useDeviceInfo() {
   const [deviceInfo, setDeviceInfo] = useState({

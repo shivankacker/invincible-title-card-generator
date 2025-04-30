@@ -13,7 +13,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="md:fixed bottom-0 inset-x-0 p-4 flex flex-col md:flex-row md:items-center justify-between">
+    <footer className="p-4 md:px-10 w-full flex flex-col md:flex-row md:items-center justify-between shrink-0">
       <div className="text-xs text-slate-600">
         This website is not affiliated with Invincible or Amazon Prime Video.
       </div>

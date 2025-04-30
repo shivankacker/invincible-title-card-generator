@@ -6,6 +6,7 @@ import ImageInput from "./uploadimage";
 import html2canvas from "html2canvas-pro";
 import domtoimage from "dom-to-image";
 import useDeviceInfo from "../utils";
+import AdBanner from "./adbanner";
 
 const backgroundPresets = [
   {
@@ -237,7 +238,17 @@ export function Toolbar(props: {
 
   return (
     <div className="md:w-1/3 w-full md:max-h-[calc(100vh-200px)] md:overflow-auto">
-      <div className="md:p-8">
+      <div className="md:pl-4">
+        <AdBanner
+          data-ad-format="auto"
+          data-ad-slot="8323722851"
+          data-full-width-responsive="true"
+          style={{
+            minWidth: 150,
+            minHeight: 150,
+          }}
+        />
+        <br />
         <input
           type="text"
           value={state.text}
@@ -364,6 +375,16 @@ export function Toolbar(props: {
           }
           value={state.showWatermark}
           onChange={(value) => setState({ ...state, showWatermark: value })}
+        />
+        <br />
+        <AdBanner
+          data-ad-format="auto"
+          data-ad-slot="4811929231"
+          data-full-width-responsive="true"
+          style={{
+            minWidth: 150,
+            minHeight: 150,
+          }}
         />
         <button
           className="button mt-4 px-4 py-2 bg-blue-500 text-yellow-200 font-bold hover:bg-blue-600 rounded-lg cursor-pointer"
