@@ -34,7 +34,7 @@ function App() {
       <Analytics />
       <div className="flex flex-col items-center justify-center md:h-screen">
         <Header />
-        <div className="flex md:flex-row flex-col md:items-center md:justify-center md:flex-1 px-4 gap-4 md:gap-0 md:px-10">
+        <div className="flex md:flex-row flex-col md:items-center md:justify-center md:flex-1 px-4 gap-4 md:gap-0 md:px-10 w-full">
           <div className="w-full md:w-2/3 flex flex-col-reverse md:flex-col gap-4">
             <Preview canvasRef={canvasRef} state={state} />
             <AdBanner
