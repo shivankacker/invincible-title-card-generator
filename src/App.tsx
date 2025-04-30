@@ -43,6 +43,7 @@ function App() {
             style={{
               minWidth: 300,
               minHeight: 50,
+              maxHeight: 100,
             }}
           />
         </div>
