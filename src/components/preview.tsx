@@ -41,7 +41,7 @@ export function Preview(props: {
   }, [canvasRef]);
 
   return (
-    <div className="bg-slate-900 rounded-xl aspect-video w-full md:w-2/3 overflow-hidden select-none relative">
+    <div className="bg-slate-900 rounded-xl aspect-video overflow-hidden select-none relative">
       {state.generating && (
         <div className="absolute inset-0 bg-slate-900 flex items-center justify-center z-10">
           Generating

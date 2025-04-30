@@ -352,6 +352,16 @@ export function Toolbar(props: {
           value={state.showWatermark}
           onChange={(value) => setState({ ...state, showWatermark: value })}
         />
+        <br />
+        <AdBanner
+          data-ad-format="auto"
+          data-ad-slot="4811929231"
+          data-full-width-responsive="true"
+          style={{
+            minWidth: 150,
+            minHeight: 150,
+          }}
+        />
         <button
           className="button mt-4 px-4 py-2 bg-blue-500 text-yellow-200 font-bold hover:bg-blue-600 rounded-lg cursor-pointer"
           onClick={download}
