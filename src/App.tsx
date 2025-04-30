@@ -38,12 +38,12 @@ function App() {
           <div className="w-full md:w-2/3 flex flex-col-reverse md:flex-col gap-4">
             <Preview canvasRef={canvasRef} state={state} />
             <AdBanner
-              data-ad-format="auto"
+              data-ad-format="rectangle"
               data-ad-slot="6767948661"
               data-full-width-responsive="true"
               style={{
                 width: "100%",
-                minHeight: 50,
+                minHeight: 100,
                 maxHeight: 100,
               }}
             />
