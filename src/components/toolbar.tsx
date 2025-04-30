@@ -387,9 +387,10 @@ export function Toolbar(props: {
           }}
         />
         <button
-          className="button mt-4 px-4 py-2 bg-blue-500 text-yellow-200 font-bold hover:bg-blue-600 rounded-lg cursor-pointer"
+          className="button mt-4 px-4 py-3 bg-blue-500 text-yellow-200 font-bold hover:bg-blue-600 rounded-lg cursor-pointer w-full"
           onClick={download}
         >
+          <i className="fas fa-download mr-2" />
           Download
         </button>
       </div>
