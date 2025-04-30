@@ -1,14 +1,15 @@
 export default function Header() {
   return (
-    <header className=" md:fixed top-0 z-50 inset-x-0 bg-slate-950 grid grid-cols-3">
-      <div></div>
-      <div className="flex flex-col items-center justify-center p-4">
-        <img src="/logo.png" alt="Logo" className="w-full md:w-auto md:h-14" />
-        <div className="leading-4 text-center tracking-widest text-xs">
-          Title Card Generator
+    <header className=" bg-slate-950 flex w-full items-center justify-between px-4 md:px-10 py-4 shrink-0">
+      <div className="flex gap-4 items-center">
+        <img src="/logo.png" alt="Logo" className="w-full h-10 md:h-14" />
+        <div className="leading-5 text-center tracking-widest">
+          Title Card
+          <br />
+          Generator
         </div>
       </div>
-      <div className="flex items-center justify-end py-4 px-12">
+      <div className="flex items-center justify-end">
         <a
           href="https://github.com/shivankacker/invincible-title-card-generator"
           className="hover:text-white transition-all text-3xl"
