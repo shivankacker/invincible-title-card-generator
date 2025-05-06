@@ -4,8 +4,6 @@ import { Slider } from "./slider";
 import ColorInput from "./colorinput";
 import ImageInput from "./uploadimage";
 import html2canvas from "html2canvas-pro";
-import domtoimage from "dom-to-image";
-import useDeviceInfo from "../utils";
 import AdBanner from "./adbanner";
 
 const backgroundPresets = [
@@ -201,29 +199,19 @@ export function Toolbar(props: {
 }) {
   const { state, setState, canvasRef } = props;
 
-  const device = useDeviceInfo();
-
   const download = async () => {
     if (!canvasRef.current) return;
     setState({ ...state, generating: true });
     const dataURL = await new Promise<string>((resolve) => {
       setTimeout(async () => {
-        if (device.os === "ios" || device.browser === "safari") {
-          const canvas = await html2canvas(canvasRef.current!, {
-            allowTaint: true,
-            useCORS: true,
-            height: canvasRef.current!.clientHeight,
-            width: canvasRef.current!.clientWidth,
-            scale: 1,
-          });
-          resolve(canvas.toDataURL("image/png"));
-        } else {
-          const canvas = await domtoimage.toPng(canvasRef.current!, {
-            height: canvasRef.current!.clientHeight,
-            width: canvasRef.current!.clientWidth,
-          });
-          resolve(canvas);
-        }
+        const canvas = await html2canvas(canvasRef.current!, {
+          allowTaint: true,
+          useCORS: true,
+          height: canvasRef.current!.clientHeight,
+          width: canvasRef.current!.clientWidth,
+          scale: 1,
+        });
+        resolve(canvas.toDataURL("image/png"));
       }, 500);
     });
 

@@ -26,10 +26,6 @@ body {
   font-family: 'Woodblock', sans-serif;
 }
 
-.curved-text {
-  transform: perspective(400px) rotateX(10deg) scaleY(1.4);
-}
-
 .input {
   @apply bg-slate-800 text-slate-100 border-slate-600 rounded-md p-2 outline-none transition-all border-2 focus:border-yellow-400
 }
