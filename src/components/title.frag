@@ -5,10 +5,11 @@ precision lowp float;
 uniform vec2 u_resolution;
 
 uniform sampler2D u_texture;
+uniform vec2 u_textureResolution;
 
 void main()
 {    
-    vec2 uv = 2.* gl_FragCoord.xy / u_resolution.xy - vec2(1.);
+    vec2 uv = (2.* gl_FragCoord.xy / u_resolution.xy - vec2(1.)) * u_resolution / u_textureResolution;
 
     // Apply stretch effect
     const float stretchFactor = 0.7;
@@ -24,5 +25,5 @@ void main()
     const float tiltEffect = .05;
     curvedUV *= (tiltEffect * uv.y + 1.);
 
-    gl_FragColor = texture2D(u_texture, 0.5 * curvedUV + vec2(0.5));
+    gl_FragColor = texture2D(u_texture, (curvedUV + vec2(1.)) / 2.);
 }

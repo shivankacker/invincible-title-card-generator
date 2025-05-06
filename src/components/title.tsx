@@ -30,7 +30,8 @@ const Title: React.FC<ShaderTextProps> = ({
       // Create offscreen canvas for text rendering
       const textCanvas = document.createElement("canvas");
       canvas.width = textCanvas.width = width;
-      canvas.height = textCanvas.height = fontSize;
+      textCanvas.height = fontSize;
+      canvas.height = fontSize * 1.2;
       const ctx = textCanvas.getContext("2d", { alpha: true });
       if (!ctx) return;
 
@@ -76,13 +77,7 @@ const Title: React.FC<ShaderTextProps> = ({
     });
   }, [text, color, fontSize, outline, outlineColor, width]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="w-full"
-      style={{ height: `${fontSize}px`, marginTop: "2%" }}
-    />
-  );
+  return <canvas ref={canvasRef} className="w-full" />;
 };
 
 export default Title;
