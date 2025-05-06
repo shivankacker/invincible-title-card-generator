@@ -26,25 +26,38 @@ const Title: React.FC<ShaderTextProps> = ({
       if (!canvasRef.current) return;
 
       const canvas = canvasRef.current;
+      const pixelRatio = window.devicePixelRatio || 1;
 
       // Create offscreen canvas for text rendering
       const textCanvas = document.createElement("canvas");
-      canvas.width = textCanvas.width = width;
-      textCanvas.height = fontSize;
-      canvas.height = fontSize * 1.2;
+      const scaledWidth = width * pixelRatio;
+      const scaledFontSize = fontSize * pixelRatio;
+
+      // Set the actual canvas sizes in pixels
+      canvas.width = textCanvas.width = scaledWidth;
+      textCanvas.height = scaledFontSize;
+      canvas.height = scaledFontSize * 1.2;
+
+      // Set the CSS size to maintain visual dimensions
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${fontSize * 1.2}px`;
+
       const ctx = textCanvas.getContext("2d", { alpha: true });
       if (!ctx) return;
 
       // Clear canvas
       ctx.clearRect(0, 0, textCanvas.width, textCanvas.height);
 
+      // Scale all drawing operations
+      ctx.scale(pixelRatio, pixelRatio);
+
       // Set text properties
       ctx.font = `${fontSize}px "Woodblock"`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      const centerX = textCanvas.width / 2;
-      const centerY = textCanvas.height / 2;
+      const centerX = width / 2;
+      const centerY = fontSize / 2;
 
       // Draw the text
       ctx.fillStyle = color;
@@ -62,7 +75,7 @@ const Title: React.FC<ShaderTextProps> = ({
       // Set up WebGL shader
       const gl = new Canvas(canvas, {
         fragmentString: fragment,
-        preserveDrawingBuffer: true,
+        preserveDrawingBuffer: true, // Allow to copy the canvas when using toDataURL
       });
 
       // Pass the text canvas to the shader

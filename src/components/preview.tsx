@@ -77,7 +77,7 @@ export function Preview(props: {
           <div
             style={{
               color: state.color,
-              marginTop: "-3%",
+              marginTop: "-6%",
             }}
             className="text-center"
           >
