@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { EditorState } from "../types";
-import useDeviceInfo from "../utils";
 import { effectPresets } from "./toolbar";
 import Title from "./title";
 
@@ -13,8 +12,6 @@ export function Preview(props: {
     width: 0,
     height: 0,
   });
-
-  const device = useDeviceInfo();
 
   const canvasDimensions = state.generating
     ? {
