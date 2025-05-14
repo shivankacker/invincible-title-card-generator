@@ -34,9 +34,8 @@ const Title: React.FC<ShaderTextProps> = ({
       const scaledFontSize = fontSize * pixelRatio;
 
       // Set the actual canvas sizes in pixels
-      canvas.width = textCanvas.width = scaledWidth;
+      textCanvas.width = scaledWidth;
       textCanvas.height = scaledFontSize;
-      canvas.height = scaledFontSize * 1.2;
 
       // Set the CSS size to maintain visual dimensions
       canvas.style.width = `${width}px`;
@@ -90,7 +89,9 @@ const Title: React.FC<ShaderTextProps> = ({
     });
   }, [text, color, fontSize, outline, outlineColor, width]);
 
-  return <canvas ref={canvasRef} className="w-full" />;
+  return (
+    <canvas ref={canvasRef} className="w-full" width={1920} height={1080} />
+  );
 };
 
 export default Title;
