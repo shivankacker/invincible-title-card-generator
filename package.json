@@ -36,5 +36,8 @@
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0",
     "vite-plugin-radar": "^0.10.0"
+  },
+  "patchedDependencies": {
+    "glsl-canvas-js@0.2.9": "patches/glsl-canvas-js@0.2.9.patch"
   }
 }
