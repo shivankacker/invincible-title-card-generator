@@ -8,6 +8,8 @@ export default function AdBanner(props: {
   const { className, style = {}, ...otherProps } = props;
 
   const development = process.env.NODE_ENV === "development";
+  const hideAdBanner =
+    development && import.meta.env.VITE_SHOW_AD_BANNERS !== "true";
 
   useEffect(() => {
     if (development) {
@@ -24,7 +26,11 @@ export default function AdBanner(props: {
 
   return (
     <div
-      className={twMerge(`shrink-0 ${development && "bg-gray-600"}`, className)}
+      className={twMerge(
+        `shrink-0 ${development && "bg-gray-600"}`,
+        className,
+        hideAdBanner && "hidden",
+      )}
     >
       {development && <div className="text-white">Ad Banner</div>}
       <ins

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { EditorState } from "../types";
-import useDeviceInfo from "../utils";
 import { effectPresets } from "./toolbar";
+import Title from "./title";
 
 export function Preview(props: {
   state: EditorState;
@@ -12,8 +12,6 @@ export function Preview(props: {
     width: 0,
     height: 0,
   });
-
-  const device = useDeviceInfo();
 
   const canvasDimensions = state.generating
     ? {
@@ -56,18 +54,14 @@ export function Preview(props: {
           background: state.background,
         }}
       >
-        <div
-          className={`woodblock w-full outline-0 bg-transparent text-center ${(device.os === "ios" || device.browser === "safari") && state.generating ? "" : "curved-text"}`}
-          style={{
-            lineHeight: 0.8,
-            fontSize: `${(canvasDimensions.width / 100) * state.fontSize}px`,
-            color: state.color,
-            WebkitTextStroke: `${state.outline}px ${state.outlineColor}`,
-            marginTop: state.showCredits ? "5%" : "0",
-          }}
-        >
-          {state.text}
-        </div>
+        <Title
+          text={state.text}
+          color={state.color}
+          fontSize={(canvasDimensions.width / 100) * state.fontSize}
+          outlineColor={state.outlineColor}
+          outline={state.outline}
+          width={canvasDimensions.width}
+        />
         {state.effect && (
           <div
             className="absolute inset-0 flex items-center justify-center"
@@ -83,6 +77,7 @@ export function Preview(props: {
           <div
             style={{
               color: state.color,
+              marginTop: "-6%",
             }}
             className="text-center"
           >

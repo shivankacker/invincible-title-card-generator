@@ -1,0 +1,16 @@
+diff --git a/dist/cjs/glsl.d.ts b/dist/cjs/glsl-canvas.d.ts
+similarity index 100%
+rename from dist/cjs/glsl.d.ts
+rename to dist/cjs/glsl-canvas.d.ts
+diff --git a/dist/cjs/glsl.js b/dist/cjs/glsl-canvas.js
+similarity index 100%
+rename from dist/cjs/glsl.js
+rename to dist/cjs/glsl-canvas.js
+diff --git a/dist/esm/glsl.d.ts b/dist/esm/glsl-canvas.d.ts
+similarity index 100%
+rename from dist/esm/glsl.d.ts
+rename to dist/esm/glsl-canvas.d.ts
+diff --git a/dist/esm/glsl.js b/dist/esm/glsl-canvas.js
+similarity index 100%
+rename from dist/esm/glsl.js
+rename to dist/esm/glsl-canvas.js

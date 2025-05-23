@@ -4,9 +4,9 @@ import { Slider } from "./slider";
 import ColorInput from "./colorinput";
 import ImageInput from "./uploadimage";
 import html2canvas from "html2canvas-pro";
+import AdBanner from "./adbanner";
 import domtoimage from "dom-to-image";
 import useDeviceInfo from "../utils";
-import AdBanner from "./adbanner";
 
 const backgroundPresets = [
   {
@@ -200,7 +200,6 @@ export function Toolbar(props: {
   canvasRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const { state, setState, canvasRef } = props;
-
   const device = useDeviceInfo();
 
   const download = async () => {
