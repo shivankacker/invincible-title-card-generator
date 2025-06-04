@@ -20,6 +20,7 @@ function App() {
     background: "url('/backgrounds/blue.jpg') no-repeat center center / cover",
     fontSize: 24,
     outline: 0,
+    subtitleOffset: 0,
     outlineColor: "black",
     effect: null,
     generating: false,

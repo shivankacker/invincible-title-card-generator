@@ -77,7 +77,7 @@ export function Preview(props: {
           <div
             style={{
               color: state.color,
-              marginTop: "-6%",
+              marginTop: `${state.subtitleOffset - 6}%`,
             }}
             className="text-center"
           >

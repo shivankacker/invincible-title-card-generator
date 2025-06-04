@@ -275,7 +275,7 @@ export function Toolbar(props: {
         <br />
         <Slider
           label="Font Size"
-          min={10}
+          min={5}
           max={40}
           value={state.fontSize}
           onChange={(value) => setState({ ...state, fontSize: value })}
@@ -286,6 +286,13 @@ export function Toolbar(props: {
           max={10}
           value={state.outline}
           onChange={(value) => setState({ ...state, outline: value })}
+        />
+        <Slider
+          label="Subtitle Offset"
+          min={0}
+          max={20}
+          value={state.subtitleOffset}
+          onChange={(value) => setState({ ...state, subtitleOffset: value })}
         />
         <br />
         <div className="mt-4 mb-1">Presets</div>
