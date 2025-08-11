@@ -22,76 +22,138 @@ const Title: React.FC<ShaderTextProps> = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
+    if (!canvasRef.current) return;
+
+    // word-wrap utility (breaks on spaces, respects \n, hard-breaks very long words)
+    function wrapLines(
+      ctx: CanvasRenderingContext2D,
+      raw: string,
+      maxWidth: number,
+      hyphenateLongWords = true,
+    ) {
+      const paragraphs = raw.split(/\n/);
+      const lines: string[] = [];
+      for (const para of paragraphs) {
+        if (para.trim() === "") {
+          lines.push(""); // blank line
+          continue;
+        }
+        const words = para.split(/\s+/);
+        let line = "";
+        for (let w of words) {
+          const test = line ? line + " " + w : w;
+          if (ctx.measureText(test).width <= maxWidth) {
+            line = test;
+            continue;
+          }
+          if (!line) {
+            // word longer than maxWidth; hard-break
+            if (hyphenateLongWords) {
+              let start = 0;
+              while (start < w.length) {
+                let lo = 1,
+                  hi = w.length - start,
+                  cut = 1;
+                while (lo <= hi) {
+                  const mid = (lo + hi) >> 1;
+                  const chunk =
+                    w.slice(start, start + mid) +
+                    (start + mid < w.length ? "-" : "");
+                  if (ctx.measureText(chunk).width <= maxWidth) {
+                    cut = mid;
+                    lo = mid + 1;
+                  } else {
+                    hi = mid - 1;
+                  }
+                }
+                const chunk =
+                  w.slice(start, start + cut) +
+                  (start + cut < w.length ? "-" : "");
+                lines.push(chunk);
+                start += cut;
+              }
+              line = "";
+            } else {
+              lines.push(w);
+              line = "";
+            }
+          } else {
+            lines.push(line);
+            line = w;
+          }
+        }
+        if (line) lines.push(line);
+      }
+      return lines;
+    }
+
     async function updateCanvas() {
-      if (!canvasRef.current) return;
+      const canvas = canvasRef.current!;
+      const dpr = window.devicePixelRatio || 1;
 
-      const canvas = canvasRef.current;
-      const pixelRatio = window.devicePixelRatio || 1;
-
-      // Create offscreen canvas for text rendering
+      // Offscreen canvas for text
       const textCanvas = document.createElement("canvas");
-      const scaledWidth = width * pixelRatio;
-      const scaledFontSize = fontSize * pixelRatio;
-
-      // Set the actual canvas sizes in pixels
-      textCanvas.width = scaledWidth;
-      textCanvas.height = scaledFontSize;
-
-      // Set the CSS size to maintain visual dimensions
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${fontSize * 1.2}px`;
-
       const ctx = textCanvas.getContext("2d", { alpha: true });
       if (!ctx) return;
 
-      // Clear canvas
-      ctx.clearRect(0, 0, textCanvas.width, textCanvas.height);
-
-      // Scale all drawing operations
-      ctx.scale(pixelRatio, pixelRatio);
-
-      // Set text properties
+      // Use unscaled ctx to measure in CSS px
       ctx.font = `${fontSize}px "Woodblock"`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      const lineHeight = Math.ceil(fontSize * 0.8);
+
+      // Calculate wrapped lines for given width (CSS px)
+      const lines = wrapLines(ctx, text, width);
+
+      // Set backing store size in device pixels
+      textCanvas.width = Math.max(1, width * dpr);
+      textCanvas.height = Math.max(1, lines.length * lineHeight * dpr);
+
+      // Now draw at 1 CSS px scale
+      const drawCtx = textCanvas.getContext("2d", { alpha: true })!;
+      drawCtx.scale(dpr, dpr);
+      drawCtx.clearRect(0, 0, textCanvas.width, textCanvas.height);
+      drawCtx.font = `${fontSize}px "Woodblock"`;
+      drawCtx.textAlign = "center";
+      drawCtx.textBaseline = "top";
 
       const centerX = width / 2;
-      const centerY = fontSize / 2;
 
-      // Draw the text
-      ctx.fillStyle = color;
-      ctx.fillText(text, centerX, centerY);
-
-      // Draw the outline on top of the text
-      if (outline > 0 && outlineColor !== "transparent") {
-        ctx.lineWidth = outline;
-        ctx.strokeStyle = outlineColor;
-        ctx.lineJoin = "round";
-        ctx.miterLimit = 2;
-        ctx.strokeText(text, centerX, centerY);
+      for (let i = 0; i < lines.length; i++) {
+        const y = i * lineHeight;
+        if (outline > 0 && outlineColor !== "transparent") {
+          drawCtx.lineWidth = outline;
+          drawCtx.strokeStyle = outlineColor;
+          drawCtx.lineJoin = "round";
+          drawCtx.miterLimit = 2;
+          drawCtx.strokeText(lines[i], centerX, y);
+        }
+        drawCtx.fillStyle = color;
+        drawCtx.fillText(lines[i], centerX, y);
       }
 
-      // Set up WebGL shader
+      // Size the visible WebGL canvas to match (CSS px)
+      const cssHeight = Math.max(1, lines.length * lineHeight);
+      canvas.style.width = `${width}px`;
+      const heightOffset = lines.length * 2.7 * (fontSize / 6);
+      canvas.style.height = `${cssHeight + heightOffset}px`;
+      canvas.width = Math.max(1, Math.floor(width * dpr));
+      canvas.height = Math.max(1, Math.floor(cssHeight * dpr));
+
+      // Init shader and pass the text texture
       const gl = new Canvas(canvas, {
         fragmentString: fragment,
-        preserveDrawingBuffer: true, // Allow to copy the canvas when using toDataURL
+        preserveDrawingBuffer: true,
+        // If your shader needs uniforms like resolution/time, set them here as well
       });
 
-      // Pass the text canvas to the shader
       gl.setTexture("u_texture", textCanvas, {
-        UNPACK_PREMULTIPLY_ALPHA_WEBGL: 1, // Makes text look less aliased
+        UNPACK_PREMULTIPLY_ALPHA_WEBGL: 1,
       });
     }
 
-    // Wait for font to load before rendering
-    document.fonts.ready.then(() => {
-      updateCanvas();
-    });
+    document.fonts.ready.then(updateCanvas);
   }, [text, color, fontSize, outline, outlineColor, width]);
 
-  return (
-    <canvas ref={canvasRef} className="w-full" width={1920} height={1080} />
-  );
+  return <canvas ref={canvasRef} className="block -translate-y-5" />;
 };
 
 export default Title;
