@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Canvas } from "glsl-canvas-js";
 import fragment from "./title.frag?raw";
+import useDeviceInfo from "../utils";
 
 interface ShaderTextProps {
   text: string;
@@ -20,6 +21,7 @@ const Title: React.FC<ShaderTextProps> = ({
   width,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const device = useDeviceInfo();
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -133,7 +135,11 @@ const Title: React.FC<ShaderTextProps> = ({
       // Size the visible WebGL canvas to match (CSS px)
       const cssHeight = Math.max(1, lines.length * lineHeight);
       canvas.style.width = `${width}px`;
-      const heightOffset = lines.length * 2.7 * (fontSize / 6);
+      const heightOffset =
+        lines.length *
+        2.7 *
+        (fontSize /
+          (device.os === "ios" || device.browser === "safari" ? 12 : 6));
       canvas.style.height = `${cssHeight + heightOffset}px`;
       canvas.width = Math.max(1, Math.floor(width * dpr));
       canvas.height = Math.max(1, Math.floor(cssHeight * dpr));
@@ -142,7 +148,6 @@ const Title: React.FC<ShaderTextProps> = ({
       const gl = new Canvas(canvas, {
         fragmentString: fragment,
         preserveDrawingBuffer: true,
-        // If your shader needs uniforms like resolution/time, set them here as well
       });
 
       gl.setTexture("u_texture", textCanvas, {
