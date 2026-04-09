@@ -1,4 +1,4 @@
-# Invincible Title Card Generator
+# omnimarkedit
 
 ![Title Card](https://invincible.shivank.dev/title-card.png)
 
