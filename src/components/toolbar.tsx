@@ -204,24 +204,24 @@ export function Toolbar(props: {
 
   const download = async () => {
     if (!canvasRef.current) return;
-    const initFontSize = state.fontSize;
-    setState({ ...state, generating: true, fontSize: 12 });
-    setState({ ...state, fontSize: initFontSize });
+    setState({ ...state, generating: true });
+    const targetWidth = 1920;
+    const targetHeight = 1080;
     const dataURL = await new Promise<string>((resolve) => {
       setTimeout(async () => {
         if (device.os === "ios" || device.browser === "safari") {
           const canvas = await html2canvas(canvasRef.current!, {
             allowTaint: true,
             useCORS: true,
-            height: canvasRef.current!.clientHeight,
-            width: canvasRef.current!.clientWidth,
+            height: targetHeight,
+            width: targetWidth,
             scale: 1,
           });
           resolve(canvas.toDataURL("image/png"));
         } else {
           const canvas = await domtoimage.toPng(canvasRef.current!, {
-            height: canvasRef.current!.clientHeight,
-            width: canvasRef.current!.clientWidth,
+            height: targetHeight,
+            width: targetWidth,
           });
           resolve(canvas);
         }
