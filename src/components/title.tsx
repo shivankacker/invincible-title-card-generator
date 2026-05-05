@@ -100,7 +100,7 @@ const Title: React.FC<ShaderTextProps> = ({
 
       // Use unscaled ctx to measure in CSS px
       ctx.font = `${fontSize}px "Woodblock"`;
-      const lineHeight = Math.ceil(fontSize * 0.8);
+      const lineHeight = Math.ceil(fontSize);
 
       // Calculate wrapped lines for given width (CSS px)
       const lines = wrapLines(ctx, text, width);
@@ -133,7 +133,7 @@ const Title: React.FC<ShaderTextProps> = ({
       }
 
       // Size the visible WebGL canvas to match (CSS px)
-      const cssHeight = Math.max(1, lines.length * lineHeight);
+      const cssHeight = Math.max(1, lines.length * lineHeight * 0.8);
       canvas.style.width = `${width}px`;
       const heightOffset =
         lines.length *
