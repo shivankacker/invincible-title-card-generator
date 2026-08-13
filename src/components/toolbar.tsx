@@ -246,6 +246,25 @@ export function Toolbar(props: {
         />
         <br />
         <br />
+        <div className="mb-2">Aspect Ratio</div>
+        <div className="flex gap-2 flex-wrap mb-4">
+          {(
+            [
+              { label: "Landscape (16:9)", value: "16:9" },
+              { label: "Instagram / Reels (9:16)", value: "9:16" },
+            ] as const
+          ).map((option) => (
+            <button
+              key={option.value}
+              className={`px-4 py-1 rounded-lg cursor-pointer border-2 ${state.aspectRatio === option.value ? "border-white bg-white/10" : "border-white/20"}`}
+              onClick={() =>
+                setState({ ...state, aspectRatio: option.value })
+              }
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
         <Slider
           label="Font Size"
           min={5}
