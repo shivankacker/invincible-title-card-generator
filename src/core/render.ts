@@ -1,8 +1,21 @@
-import { EditorState } from "../types";
+import { AspectRatio, EditorState } from "../types";
 import { maxTextureSize, warpText } from "./warp";
 
 export const CARD_WIDTH = 1920;
 export const CARD_HEIGHT = 1080;
+
+/** Resolution (in pixels) used to render the card for a given aspect ratio. */
+const CARD_SIZES: Record<AspectRatio, { width: number; height: number }> = {
+  "16:9": { width: CARD_WIDTH, height: CARD_HEIGHT },
+  "9:16": { width: 1080, height: 1920 },
+};
+
+export function getCardSize(aspectRatio: AspectRatio): {
+  width: number;
+  height: number;
+} {
+  return CARD_SIZES[aspectRatio] ?? CARD_SIZES["16:9"];
+}
 
 const TITLE_FONT = "Woodblock";
 const BODY_FONT = "Futura";
@@ -135,13 +148,14 @@ function renderTitle(
   lines: string[],
   fontSize: number,
   lineHeight: number,
+  cardWidth: number,
 ): HTMLCanvasElement | null {
   const height = lines.length * lineHeight;
   const limit = maxTextureSize();
-  const scale = Math.min(1, limit / Math.max(CARD_WIDTH, height));
+  const scale = Math.min(1, limit / Math.max(cardWidth, height));
 
   const text = document.createElement("canvas");
-  text.width = Math.max(1, Math.round(CARD_WIDTH * scale));
+  text.width = Math.max(1, Math.round(cardWidth * scale));
   text.height = Math.max(1, Math.round(height * scale));
 
   const ctx = text.getContext("2d");
@@ -158,10 +172,10 @@ function renderTitle(
     if (state.outline > 0 && state.outlineColor !== "transparent") {
       ctx.lineWidth = state.outline;
       ctx.strokeStyle = state.outlineColor;
-      ctx.strokeText(line, CARD_WIDTH / 2, y);
+      ctx.strokeText(line, cardWidth / 2, y);
     }
     ctx.fillStyle = state.color;
-    ctx.fillText(line, CARD_WIDTH / 2, y);
+    ctx.fillText(line, cardWidth / 2, y);
   });
 
   return warpText(text, text.width, text.height * TITLE_HEIGHT);
@@ -171,25 +185,27 @@ function drawLayer(
   ctx: CanvasRenderingContext2D,
   layer: Layer,
   opacity: number,
+  cardWidth: number,
+  cardHeight: number,
 ) {
   ctx.save();
   ctx.globalAlpha = opacity;
   if (layer.color) {
     ctx.fillStyle = layer.color;
-    ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
+    ctx.fillRect(0, 0, cardWidth, cardHeight);
   }
   if (layer.image) {
     // `background-size: cover` with `background-position: center`.
     const scale = Math.max(
-      CARD_WIDTH / layer.image.width,
-      CARD_HEIGHT / layer.image.height,
+      cardWidth / layer.image.width,
+      cardHeight / layer.image.height,
     );
     const width = layer.image.width * scale;
     const height = layer.image.height * scale;
     ctx.drawImage(
       layer.image,
-      (CARD_WIDTH - width) / 2,
-      (CARD_HEIGHT - height) / 2,
+      (cardWidth - width) / 2,
+      (cardHeight - height) / 2,
       width,
       height,
     );
@@ -222,35 +238,39 @@ export function drawCard(
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
-  canvas.width = CARD_WIDTH;
-  canvas.height = CARD_HEIGHT;
-  ctx.clearRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
-  drawLayer(ctx, assets.background, 1);
+  const { width: cardWidth, height: cardHeight } = getCardSize(
+    state.aspectRatio,
+  );
 
-  const fontSize = (CARD_WIDTH / 100) * state.fontSize;
+  canvas.width = cardWidth;
+  canvas.height = cardHeight;
+  ctx.clearRect(0, 0, cardWidth, cardHeight);
+  drawLayer(ctx, assets.background, 1, cardWidth, cardHeight);
+
+  const fontSize = (cardWidth / 100) * state.fontSize;
   const lineHeight = Math.ceil(fontSize);
   ctx.font = `${fontSize}px "${TITLE_FONT}"`;
-  const lines = wrapLines(ctx, state.text, CARD_WIDTH);
+  const lines = wrapLines(ctx, state.text, cardWidth);
 
-  const smallSubtitleSize = CARD_WIDTH * SMALL_SUBTITLE_SIZE;
-  const subtitleSize = CARD_WIDTH * SUBTITLE_SIZE;
+  const smallSubtitleSize = cardWidth * SMALL_SUBTITLE_SIZE;
+  const subtitleSize = cardWidth * SUBTITLE_SIZE;
   const titleHeight = lines.length * lineHeight * TITLE_HEIGHT;
   const creditsHeight = state.showCredits
     ? (smallSubtitleSize + subtitleSize) * LINE_HEIGHT
     : 0;
   const creditsGap = state.showCredits
-    ? CARD_HEIGHT * CREDITS_GAP +
-      (CARD_WIDTH * (state.subtitleOffset - 5)) / 100
+    ? cardHeight * CREDITS_GAP +
+      (cardWidth * (state.subtitleOffset - 5)) / 100
     : 0;
-  const top = (CARD_HEIGHT - (titleHeight + creditsGap + creditsHeight)) / 2;
+  const top = (cardHeight - (titleHeight + creditsGap + creditsHeight)) / 2;
 
-  const title = renderTitle(state, lines, fontSize, lineHeight);
+  const title = renderTitle(state, lines, fontSize, lineHeight, cardWidth);
   if (title) {
     ctx.drawImage(
       title,
       0,
-      top - CARD_WIDTH * TITLE_OFFSET,
-      CARD_WIDTH,
+      top - cardWidth * TITLE_OFFSET,
+      cardWidth,
       titleHeight,
     );
   }
@@ -264,23 +284,24 @@ export function drawCard(
       ctx,
       state.smallSubtitle,
       smallSubtitleSize,
-      CARD_WIDTH / 2,
+      cardWidth / 2,
       creditsTop,
     );
     drawTextLine(
       ctx,
       state.subtitle,
       subtitleSize,
-      CARD_WIDTH / 2,
+      cardWidth / 2,
       creditsTop + smallSubtitleSize * LINE_HEIGHT,
     );
   }
 
-  if (assets.effect) drawLayer(ctx, assets.effect, effectOpacity);
+  if (assets.effect)
+    drawLayer(ctx, assets.effect, effectOpacity, cardWidth, cardHeight);
 
   if (state.showWatermark) {
-    const size = CARD_WIDTH * WATERMARK_SIZE;
-    const padding = CARD_WIDTH * WATERMARK_PADDING;
+    const size = cardWidth * WATERMARK_SIZE;
+    const padding = cardWidth * WATERMARK_PADDING;
     ctx.save();
     ctx.globalAlpha = 0.5;
     ctx.fillStyle = "#ffffff";
@@ -290,8 +311,8 @@ export function drawCard(
       ctx,
       WATERMARK_TEXT,
       size,
-      CARD_WIDTH - padding,
-      CARD_HEIGHT - padding - size * LINE_HEIGHT,
+      cardWidth - padding,
+      cardHeight - padding - size * LINE_HEIGHT,
     );
     ctx.restore();
   }

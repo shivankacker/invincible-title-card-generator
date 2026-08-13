@@ -23,6 +23,7 @@ function App() {
     subtitleOffset: -5,
     outlineColor: "black",
     effect: null,
+    aspectRatio: "16:9",
     smallSubtitle: "BASED ON THE COMIC BOOK BY",
     subtitle: "Robert Kirkman, Cory Walker, & Ryan Ottley",
   });

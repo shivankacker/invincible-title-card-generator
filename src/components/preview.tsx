@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { EditorState } from "../types";
 import { effectPresets } from "./toolbar";
-import { CARD_HEIGHT, CARD_WIDTH, drawCard, prepareCard } from "../core/render";
+import { drawCard, getCardSize, prepareCard } from "../core/render";
 
 export function Preview(props: {
   state: EditorState;
@@ -29,12 +29,18 @@ export function Preview(props: {
     };
   }, [state, canvasRef]);
 
+  const { width, height } = getCardSize(state.aspectRatio);
+  const isPortrait = state.aspectRatio === "9:16";
+
   return (
-    <div className="bg-slate-900 rounded-xl aspect-video overflow-hidden select-none relative shrink-0">
+    <div
+      className={`bg-slate-900 rounded-xl overflow-hidden select-none relative shrink-0 mx-auto w-full ${isPortrait ? "max-w-sm" : ""}`}
+      style={{ aspectRatio: `${width} / ${height}` }}
+    >
       <canvas
         ref={canvasRef}
-        width={CARD_WIDTH}
-        height={CARD_HEIGHT}
+        width={width}
+        height={height}
         className="block w-full h-full"
       />
       {loading && (
