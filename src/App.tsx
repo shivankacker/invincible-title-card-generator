@@ -20,7 +20,7 @@ function App() {
     background: "url('/backgrounds/blue.jpg') no-repeat center center / cover",
     fontSize: 24,
     outline: 0,
-    subtitleOffset: 0,
+    subtitleOffset: -5,
     outlineColor: "black",
     effect: null,
     smallSubtitle: "BASED ON THE COMIC BOOK BY",
