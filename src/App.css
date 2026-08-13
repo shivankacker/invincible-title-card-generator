@@ -5,6 +5,19 @@
   src: url('/woodblock.otf') format('opentype');
 }
 
+/**
+ * Woodblock has no Cyrillic glyphs. Register a Cyrillic-only subset of Noto
+ * Sans Bold under the same family name, scoped with `unicode-range`, so the
+ * browser (and canvas `fillText`) automatically substitutes it for Cyrillic
+ * characters while Latin text keeps using Woodblock.
+ */
+@font-face {
+  font-family: 'Woodblock';
+  src: url('/fonts/NotoSans-Cyrillic-Bold.woff2') format('woff2');
+  unicode-range: U+0400-052F, U+1C80-1C8F, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Futura';
   src: url('/Futura.woff2') format('woff2'),
@@ -12,6 +25,14 @@
       url('/Futura.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
+}
+
+/** Same Cyrillic fallback strategy as Woodblock above, but regular weight to match Futura's body text. */
+@font-face {
+  font-family: 'Futura';
+  src: url('/fonts/NotoSans-Cyrillic-Regular.woff2') format('woff2');
+  unicode-range: U+0400-052F, U+1C80-1C8F, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
   font-display: swap;
 }
 
