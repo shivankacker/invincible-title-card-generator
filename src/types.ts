@@ -10,6 +10,5 @@ export interface EditorState {
   outline: number;
   outlineColor: string;
   effect: string | null;
-  generating: boolean;
   subtitleOffset: number;
 }

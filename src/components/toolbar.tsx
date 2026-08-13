@@ -3,10 +3,7 @@ import { CheckBox } from "./checkbox";
 import { Slider } from "./slider";
 import ColorInput from "./colorinput";
 import ImageInput from "./uploadimage";
-import html2canvas from "html2canvas-pro";
 import AdBanner from "./adbanner";
-import domtoimage from "dom-to-image";
-import useDeviceInfo from "../utils";
 
 const backgroundPresets = [
   {
@@ -197,44 +194,18 @@ const Preset = (props: {
 export function Toolbar(props: {
   state: EditorState;
   setState: (state: EditorState) => void;
-  canvasRef: React.RefObject<HTMLDivElement | null>;
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
 }) {
   const { state, setState, canvasRef } = props;
-  const device = useDeviceInfo();
 
-  const download = async () => {
+  const download = () => {
     if (!canvasRef.current) return;
-    setState({ ...state, generating: true });
-    const targetWidth = 1920;
-    const targetHeight = 1080;
-    const dataURL = await new Promise<string>((resolve) => {
-      setTimeout(async () => {
-        if (device.os === "ios" || device.browser === "safari") {
-          const canvas = await html2canvas(canvasRef.current!, {
-            allowTaint: true,
-            useCORS: true,
-            height: targetHeight,
-            width: targetWidth,
-            scale: 1,
-          });
-          resolve(canvas.toDataURL("image/png"));
-        } else {
-          const canvas = await domtoimage.toPng(canvasRef.current!, {
-            height: targetHeight,
-            width: targetWidth,
-          });
-          resolve(canvas);
-        }
-      }, 500);
-    });
-
     const link = document.createElement("a");
-    link.href = dataURL;
+    link.href = canvasRef.current.toDataURL("image/png");
     link.download = "title-card.png";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    setState({ ...state, generating: false });
   };
 
   return (

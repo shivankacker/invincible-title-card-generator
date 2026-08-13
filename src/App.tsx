@@ -23,12 +23,11 @@ function App() {
     subtitleOffset: 0,
     outlineColor: "black",
     effect: null,
-    generating: false,
     smallSubtitle: "BASED ON THE COMIC BOOK BY",
     subtitle: "Robert Kirkman, Cory Walker, & Ryan Ottley",
   });
 
-  const canvasRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   return (
     <>
