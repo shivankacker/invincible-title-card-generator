@@ -169,6 +169,21 @@ export const presets: (Partial<EditorState> & { name: string })[] = [
     background: "#9a004f",
     color: "#95b38e",
   },
+  {
+    name: "Thragg",
+    background: "#9a2b17",
+    color: "#8f7d71",
+  },
+  {
+    name: "Tech Jacket",
+    background: "#515578",
+    color: "#c1dbdc",
+  },
+  {
+    name: "Powerplex",
+    background: "#bc3134",
+    color: "#FFA500",
+  },
 ];
 
 const Preset = (props: {
@@ -257,9 +272,7 @@ export function Toolbar(props: {
             <button
               key={option.value}
               className={`px-4 py-1 rounded-lg cursor-pointer border-2 ${state.aspectRatio === option.value ? "border-white bg-white/10" : "border-white/20"}`}
-              onClick={() =>
-                setState({ ...state, aspectRatio: option.value })
-              }
+              onClick={() => setState({ ...state, aspectRatio: option.value })}
             >
               {option.label}
             </button>
