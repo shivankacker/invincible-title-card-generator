@@ -33,10 +33,10 @@ function App() {
   return (
     <>
       <Analytics />
-      <div className="flex flex-col items-center justify-center md:h-screen">
+      <div className="flex flex-col h-dvh overflow-hidden">
         <Header />
-        <div className="flex md:flex-row flex-col md:items-center md:justify-center md:flex-1 px-4 gap-4 md:gap-0 md:px-10 w-full">
-          <div className="w-full md:w-2/3 flex flex-col-reverse md:flex-col gap-4">
+        <div className="flex flex-col md:flex-row flex-1 min-h-0 px-4 gap-4 md:gap-0 md:px-10 w-full overflow-hidden">
+          <div className="w-full md:w-2/3 flex flex-col-reverse md:flex-col gap-4 min-h-0 shrink-0 md:flex-none">
             <Preview canvasRef={canvasRef} state={state} />
             <AdBanner
               data-ad-format="fluid"

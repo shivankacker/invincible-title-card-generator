@@ -224,7 +224,7 @@ export function Toolbar(props: {
   };
 
   return (
-    <div className="md:w-1/3 w-full max-h-[calc(100vh-400px)] md:max-h-[calc(100vh-150px)] overflow-auto">
+    <div className="w-full md:w-1/3 flex-1 md:flex-none min-h-0 overflow-y-auto">
       <div className="md:pl-4">
         <AdBanner
           data-ad-format="auto"
