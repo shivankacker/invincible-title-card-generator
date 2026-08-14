@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { EditorState } from "../types";
 import { CheckBox } from "./checkbox";
 import { Slider } from "./slider";
 import ColorInput from "./colorinput";
 import ImageInput from "./uploadimage";
 import AdBanner from "./adbanner";
+import { prepareCard } from "../core/render";
+import { exportGif, exportVideo } from "../core/export";
 
 const backgroundPresets = [
   {
@@ -212,6 +215,8 @@ export function Toolbar(props: {
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
 }) {
   const { state, setState, canvasRef } = props;
+  const [exporting, setExporting] = useState<"video" | "gif" | null>(null);
+  const [progress, setProgress] = useState(0);
 
   const download = () => {
     if (!canvasRef.current) return;
@@ -222,6 +227,44 @@ export function Toolbar(props: {
     link.click();
     document.body.removeChild(link);
   };
+
+  const runExport = async (
+    kind: "video" | "gif",
+    run: (
+      assets: Awaited<ReturnType<typeof prepareCard>>,
+      opacity: number,
+    ) => Promise<void>,
+  ) => {
+    if (exporting) return;
+    setExporting(kind);
+    setProgress(0);
+    try {
+      const assets = await prepareCard(state);
+      const opacity =
+        effectPresets.find((effect) => effect.value === state.effect)
+          ?.opacity ?? 1;
+      await run(assets, opacity);
+    } catch (error) {
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Export failed. Please try again.",
+      );
+    } finally {
+      setExporting(null);
+      setProgress(0);
+    }
+  };
+
+  const downloadVideo = () =>
+    runExport("video", (assets, opacity) =>
+      exportVideo(state, assets, opacity, setProgress),
+    );
+
+  const downloadGif = () =>
+    runExport("gif", (assets, opacity) =>
+      exportGif(state, assets, opacity, setProgress),
+    );
 
   return (
     <div className="w-full md:w-1/3 flex-1 md:flex-none min-h-0 overflow-y-auto">
@@ -401,8 +444,32 @@ export function Toolbar(props: {
           className="button mt-4 px-4 py-3 bg-blue-500 text-yellow-200 font-bold hover:bg-blue-600 rounded-lg cursor-pointer w-full"
           onClick={download}
         >
-          <i className="fas fa-download mr-2" />
-          Download
+          <i className="fas fa-image mr-2" />
+          Download Image
+        </button>
+        <button
+          className="button mt-2 px-4 py-3 bg-blue-500 text-yellow-200 font-bold hover:bg-blue-600 rounded-lg cursor-pointer w-full disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={downloadVideo}
+          disabled={exporting !== null}
+        >
+          <i
+            className={`fas mr-2 ${exporting === "video" ? "fa-circle-notch animate-spin" : "fa-film"}`}
+          />
+          {exporting === "video"
+            ? `Rendering Video... ${Math.round(progress * 100)}%`
+            : "Download Video"}
+        </button>
+        <button
+          className="button mt-2 px-4 py-3 bg-blue-500 text-yellow-200 font-bold hover:bg-blue-600 rounded-lg cursor-pointer w-full disabled:opacity-50 disabled:cursor-not-allowed"
+          onClick={downloadGif}
+          disabled={exporting !== null}
+        >
+          <i
+            className={`fas mr-2 ${exporting === "gif" ? "fa-circle-notch animate-spin" : "fa-file-video"}`}
+          />
+          {exporting === "gif"
+            ? `Rendering GIF... ${Math.round(progress * 100)}%`
+            : "Download GIF"}
         </button>
       </div>
     </div>

@@ -1,4 +1,6 @@
 import { AspectRatio, EditorState } from "../types";
+import { AnimationFrame } from "./animation";
+import { getEffectConfig, WipeDirection } from "./effects";
 import { maxTextureSize, warpText } from "./warp";
 
 export const CARD_WIDTH = 1920;
@@ -213,6 +215,68 @@ function drawLayer(
   ctx.restore();
 }
 
+/** Translation origin and sweep direction (in card pixels) for each wipe corner. */
+function getWipeGeometry(
+  direction: WipeDirection,
+  cardWidth: number,
+  cardHeight: number,
+): { origin: [number, number]; vector: [number, number] } {
+  switch (direction) {
+    case "bottom-right":
+      return {
+        origin: [cardWidth, cardHeight],
+        vector: [-cardWidth, -cardHeight],
+      };
+    case "top-left":
+      return { origin: [0, 0], vector: [cardWidth, cardHeight] };
+    case "top-right":
+      return { origin: [cardWidth, 0], vector: [-cardWidth, cardHeight] };
+    case "bottom-left":
+    default:
+      return { origin: [0, cardHeight], vector: [cardWidth, -cardHeight] };
+  }
+}
+
+/** Reveals `layer` with a quick diagonal wipe that grows out from one corner. */
+function drawEffectWipe(
+  ctx: CanvasRenderingContext2D,
+  layer: Layer,
+  opacity: number,
+  progress: number,
+  direction: WipeDirection,
+  cardWidth: number,
+  cardHeight: number,
+) {
+  if (progress <= 0) return;
+
+  ctx.save();
+  if (progress < 1) {
+    // Rotate so the sweep direction becomes the x-axis, clip a growing band
+    // along it, then reset the transform so the layer itself is drawn
+    // axis-aligned (the clip region, once set, stays fixed in place).
+    const diagonal = Math.hypot(cardWidth, cardHeight);
+    const { origin, vector } = getWipeGeometry(
+      direction,
+      cardWidth,
+      cardHeight,
+    );
+    const angle = Math.atan2(vector[1], vector[0]);
+    ctx.translate(origin[0], origin[1]);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.rect(
+      -diagonal,
+      -diagonal,
+      progress * diagonal + diagonal,
+      diagonal * 2,
+    );
+    ctx.clip();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
+  drawLayer(ctx, layer, opacity, cardWidth, cardHeight);
+  ctx.restore();
+}
+
 /** Draws one line of body text inside a `line-height: normal` line box. */
 function drawTextLine(
   ctx: CanvasRenderingContext2D,
@@ -229,11 +293,36 @@ function drawTextLine(
   ctx.fillText(text, x, top + leading + ascent);
 }
 
+function drawWatermark(
+  ctx: CanvasRenderingContext2D,
+  cardWidth: number,
+  cardHeight: number,
+) {
+  const size = cardWidth * WATERMARK_SIZE;
+  const padding = cardWidth * WATERMARK_PADDING;
+  ctx.save();
+  ctx.globalAlpha = 0.5;
+  ctx.fillStyle = "#ffffff";
+  ctx.textAlign = "right";
+  ctx.textBaseline = "alphabetic";
+  drawTextLine(
+    ctx,
+    WATERMARK_TEXT,
+    size,
+    cardWidth - padding,
+    cardHeight - padding - size * LINE_HEIGHT,
+  );
+  ctx.restore();
+}
+
 export function drawCard(
   canvas: HTMLCanvasElement,
   state: EditorState,
   assets: CardAssets,
   effectOpacity = 1,
+  creditsOpacity = state.showCredits ? 1 : 0,
+  includeWatermark = true,
+  effectProgress = 1,
 ) {
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
@@ -259,8 +348,7 @@ export function drawCard(
     ? (smallSubtitleSize + subtitleSize) * LINE_HEIGHT
     : 0;
   const creditsGap = state.showCredits
-    ? cardHeight * CREDITS_GAP +
-      (cardWidth * (state.subtitleOffset - 5)) / 100
+    ? cardHeight * CREDITS_GAP + (cardWidth * (state.subtitleOffset - 5)) / 100
     : 0;
   const top = (cardHeight - (titleHeight + creditsGap + creditsHeight)) / 2;
 
@@ -275,8 +363,10 @@ export function drawCard(
     );
   }
 
-  if (state.showCredits) {
+  if (state.showCredits && creditsOpacity > 0) {
     const creditsTop = top + titleHeight + creditsGap;
+    ctx.save();
+    ctx.globalAlpha = creditsOpacity;
     ctx.fillStyle = state.color;
     ctx.textAlign = "center";
     ctx.textBaseline = "alphabetic";
@@ -294,26 +384,70 @@ export function drawCard(
       cardWidth / 2,
       creditsTop + smallSubtitleSize * LINE_HEIGHT,
     );
+    ctx.restore();
   }
 
   if (assets.effect)
-    drawLayer(ctx, assets.effect, effectOpacity, cardWidth, cardHeight);
-
-  if (state.showWatermark) {
-    const size = cardWidth * WATERMARK_SIZE;
-    const padding = cardWidth * WATERMARK_PADDING;
-    ctx.save();
-    ctx.globalAlpha = 0.5;
-    ctx.fillStyle = "#ffffff";
-    ctx.textAlign = "right";
-    ctx.textBaseline = "alphabetic";
-    drawTextLine(
+    drawEffectWipe(
       ctx,
-      WATERMARK_TEXT,
-      size,
-      cardWidth - padding,
-      cardHeight - padding - size * LINE_HEIGHT,
+      assets.effect,
+      effectOpacity,
+      effectProgress,
+      getEffectConfig(state.effect).wipeDirection,
+      cardWidth,
+      cardHeight,
     );
+
+  if (state.showWatermark && includeWatermark) {
+    drawWatermark(ctx, cardWidth, cardHeight);
+  }
+}
+
+let animationScratch: HTMLCanvasElement | null = null;
+
+/** Draws a single animated frame (zoom + subtitle/black fade) used for video/GIF export. */
+export function drawAnimatedCard(
+  canvas: HTMLCanvasElement,
+  state: EditorState,
+  assets: CardAssets,
+  effectOpacity: number,
+  frame: AnimationFrame,
+) {
+  const { width, height } = getCardSize(state.aspectRatio);
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  if (!animationScratch) animationScratch = document.createElement("canvas");
+  animationScratch.width = width;
+  animationScratch.height = height;
+  // Watermark is drawn separately below, after the zoom transform, so it stays fixed.
+  drawCard(
+    animationScratch,
+    state,
+    assets,
+    effectOpacity,
+    frame.creditsOpacity,
+    false,
+    frame.effectProgress,
+  );
+
+  ctx.clearRect(0, 0, width, height);
+  ctx.save();
+  ctx.translate(width / 2, height / 2);
+  ctx.scale(frame.scale, frame.scale);
+  ctx.drawImage(animationScratch, -width / 2, -height / 2, width, height);
+  ctx.restore();
+
+  if (state.showWatermark) drawWatermark(ctx, width, height);
+
+  if (frame.fadeOpacity > 0) {
+    ctx.save();
+    ctx.globalAlpha = frame.fadeOpacity;
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, width, height);
     ctx.restore();
   }
 }
