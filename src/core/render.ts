@@ -46,11 +46,14 @@ export interface CardAssets {
 const images = new Map<string, Promise<HTMLImageElement | null>>();
 let fonts: Promise<unknown> | null = null;
 
+/** Sample text covering Latin plus regular/extended Cyrillic, used to force-load every font face. */
+const FONT_LOAD_SAMPLE = "Aa \u0410\u044F\u0466\u046a\u0472\u0474\ua64b";
+
 function loadFonts(): Promise<unknown> {
   if (!fonts) {
     fonts = Promise.all([
-      document.fonts.load(`100px "${TITLE_FONT}"`),
-      document.fonts.load(`100px "${BODY_FONT}"`),
+      document.fonts.load(`100px "${TITLE_FONT}"`, FONT_LOAD_SAMPLE),
+      document.fonts.load(`100px "${BODY_FONT}"`, FONT_LOAD_SAMPLE),
     ]).then(() => document.fonts.ready);
   }
   return fonts;
